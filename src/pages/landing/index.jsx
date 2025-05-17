@@ -4,10 +4,10 @@ import { motion, useInView } from 'framer-motion';
 import { useEffect, useRef, useState } from "react";
 import { FaBullseye, FaEye, FaCheckCircle } from 'react-icons/fa';
 import { FaShieldAlt, FaTools, FaPeopleCarry, FaChartLine } from 'react-icons/fa';
-import about from "../../assets/images/about-image.jpg"
 import academy from "../../assets/images/academy.jpg"
 import advisory from "../../assets/images/advisory.jpg"
 import approach from "../../assets/images/approach.jpg"
+import capacity from "../../assets/images/capacity.jpg"
 import technical from "../../assets/images/technical.jpg"
 import impact from "../../assets/images/impact.jpg"
 import { image } from "motion/react-client";
@@ -73,7 +73,7 @@ const services = [
         icon: <FaTools className="text-white" size={20} />,
         title: 'Capacity Building',
         desc: 'Through ACDRO Academy and specialized programs, we deliver targeted training, skills development, and knowledge transfer to empower stakeholders across civil society, law enforcement, and industry.',
-        image: technical,
+        image: capacity,
         link: '/services#capacity-building',
     },
     {
@@ -184,10 +184,10 @@ const Landing = () => {
 
                         <motion.a
                             variants={fadeUp}
-                            href="#"
+                            href="/contact-us"
                             className="mt-8 inline-block bg-[#0792FB] hover:bg-blue-500 text-white px-8 py-3 rounded-full font-semibold text-sm shadow-lg transition duration-300"
                         >
-                            Get Started
+                            Contact Us
                         </motion.a>
                     </motion.div>
                 </section>

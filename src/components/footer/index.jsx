@@ -3,7 +3,7 @@ import logo from '../../assets/images/logo.png';
 
 const Footer = () => {
     return (
-        <footer className="bg-gray-950 text-gray-300 py-16 px-6 md:px-12 lg:px-24">
+        <footer className="bg-[#061230] text-gray-300 py-16 px-6 md:px-12 lg:px-24">
             <div className="max-w-7xl mx-auto grid gap-10 md:grid-cols-4 sm:grid-cols-2">
 
                 {/* Logo & Tagline */}
@@ -40,7 +40,13 @@ const Footer = () => {
                         </li>
                         <li className="flex items-center gap-3">
                             <FaEnvelope className="text-[#0792FB]" />
-                            <a href="mailto:info@acdrogov.org">info@acdro.org</a>
+                            <span className="">Email:</span>{" "}
+                            <a
+                                href="mailto:info@pleroma-scycamore.org"
+                                className="hover:underline hover:text-gray-200"
+                            >
+                                info@aibconsulting.biz
+                            </a>
                         </li>
                     </ul>
                 </div>
