@@ -1,7 +1,13 @@
 import React from 'react';
 import Navbar from '../../components/navbar';
+import { useState, useEffect } from 'react';
+import { motion } from 'motion/react';
+import Footer from '../../components/footer';
+
 
 const ContactPage = () => {
+   
+    
   return (
     <>
       <Navbar />
@@ -17,7 +23,7 @@ const ContactPage = () => {
       </section>
 
       {/* Contact Form + Info */}
-      <section className="bg-black text-white py-24 px-6 md:px-12">
+      <section className="bg-[#050B1E] text-white py-24 px-6 md:px-12">
         <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-start">
           {/* Form */}
           <div>
@@ -81,7 +87,7 @@ const ContactPage = () => {
               <li className="mt-6">
                 <h3 className="text-lg font-semibold mb-2">Follow Us</h3>
                 <ul className="flex gap-4 text-[#0792FB] text-xl">
-                  <li><a href="https://twitter.com/acdro2" target="_blank" rel="noreferrer">X</a></li>
+                  <li><a href="https://x.com/acdro2" target="_blank" rel="noreferrer">X</a></li>
                   <li><a href="https://facebook.com/acdro2" target="_blank" rel="noreferrer">Facebook</a></li>
                   <li><a href="https://linkedin.com/company/acdro" target="_blank" rel="noreferrer">LinkedIn</a></li>
                 </ul>
@@ -106,6 +112,8 @@ const ContactPage = () => {
           </a>
         </div>
       </section>
+
+
     </>
   );
 };

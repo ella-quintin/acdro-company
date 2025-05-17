@@ -1,11 +1,37 @@
 import React from 'react'
 import Navbar from '../../components/navbar'
+import Footer from '../../components/footer'
+import { useState, useEffect } from 'react'
+import { motion } from 'framer-motion'
 
 const Academy = () => {
+      const [showScrollButton, setShowScrollButton] = useState(false);
+// Handle scroll events to toggle button visibility
+    useEffect(() => {
+        const handleScroll = () => {
+            if (window.scrollY > 200) {
+                setShowScrollButton(true);
+            } else {
+                setShowScrollButton(false);
+            }
+        };
+        window.addEventListener("scroll", handleScroll);
+
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
+    // Scroll to top logic
+    const scrollToTop = () => {
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+        });
+    };
+    
     return (
         <>
             <Navbar />
-            <div className='bg-gray-900'>
+            <div className='bg-[#050B1E]'>
             <section className=" bg-gradient-to-br from-gray-900 via-black to-[#0792FB] text-white py-32 px-6 md:px-12 text-center">
                 <div className="max-w-4xl mx-auto">
                     <h1 className="text-4xl md:text-5xl font-extrabold mb-4">
@@ -40,7 +66,7 @@ const Academy = () => {
                         {[
                             {
                                 title: 'Capacity Building & Training',
-                                desc: 'Workshops across sectors, empowering professionals, law enforcement, and educators.',
+                                desc: 'Targeted training, Skills Development and Workshops across sectors, empowering professionals, law enforcement, and educators, and civil society.',
                             },
                             {
                                 title: 'Certification Programs',
@@ -115,6 +141,21 @@ const Academy = () => {
                 </div>
             </section>
             </div>
+             {/* Scroll to Top Button */}
+            {showScrollButton && (
+                <motion.button
+                    onClick={scrollToTop}
+                    className="fixed bottom-5 right-5 bg-[#0792FB] text-white p-4 rounded-full shadow-lg hover:bg-blue-500 focus:outline-none"
+                    initial={{ opacity: 0, scale: 0 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.3 }}
+                    whileHover={{ scale: 1.1 }}
+                >
+                    ↑
+                </motion.button>
+            )}
+
+            <Footer/>
         </>
 
     )

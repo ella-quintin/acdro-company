@@ -11,8 +11,8 @@ import approach from "../../assets/images/approach.jpg"
 import technical from "../../assets/images/technical.jpg"
 import impact from "../../assets/images/impact.jpg"
 import { image } from "motion/react-client";
+import Footer from "../../components/footer";
 
-// Animation variants
 
 
 const staggerContainer = {
@@ -52,20 +52,29 @@ const slideRight = {
     },
 };
 
+
+
 const services = [
     {
         icon: <FaShieldAlt className="text-white" size={20} />,
-        title: 'Cybersecurity Policy & Strategy Advisory Services',
-        desc: 'From policy development to international frameworks, we support nations and institutions to build secure digital environments.',
+        title: 'Digital Policy & Strategic Advisory Services',
+        desc: 'We provide expert guidance on cybersecurity policy, digital rights governance, and regulatory compliance to governments, institutions, and private sector partners.',
         image: advisory,
         link: '/services#advisory-services',
     },
     {
         icon: <FaTools className="text-white" size={20} />,
-        title: 'Technical Cybersecurity Solutions and Capacity Services',
-        desc: 'Risk assessments, VAPT, incident response, and advanced SOC strategies to strengthen cyber resilience.',
+        title: 'Technical Solutions',
+        desc: 'Our team designs and implements innovative technology-based solutions, including digital forensics, incident response frameworks, secure platforms, and risk management systems.',
         image: technical,
         link: '/services#technical-services',
+    },
+    {
+        icon: <FaTools className="text-white" size={20} />,
+        title: 'Capacity Building',
+        desc: 'Through ACDRO Academy and specialized programs, we deliver targeted training, skills development, and knowledge transfer to empower stakeholders across civil society, law enforcement, and industry.',
+        image: technical,
+        link: '/services#capacity-building',
     },
     {
         icon: <FaPeopleCarry className="text-white" size={20} />,
@@ -99,9 +108,10 @@ const HeroHeading = () => {
                 setDisplayedText(fullText.slice(0, index + 1));
                 index++;
                 if (index === fullText.length) clearInterval(interval);
-            }, 30); // Typing speed
+            }, 30); 
         }
     }, [isInView]);
+    
 
     return (
         <h1
@@ -117,11 +127,34 @@ const HeroHeading = () => {
 
 
 const Landing = () => {
+    const [showScrollButton, setShowScrollButton] = useState(false);
+// Handle scroll events to toggle button visibility
+    useEffect(() => {
+        const handleScroll = () => {
+            if (window.scrollY > 200) {
+                setShowScrollButton(true);
+            } else {
+                setShowScrollButton(false);
+            }
+        };
+        window.addEventListener("scroll", handleScroll);
+
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
+    // Scroll to top logic
+    const scrollToTop = () => {
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+        });
+    };
+
     return (
         <>
             <Navbar />
             <div className="bg-[#00050F] overflow-hidden">
-                <section className="relative bg-gradient-to-br from-gray-900 via-black to-[#0792FB] text-white py-40 px-6 md:px-12 lg:px-24 overflow-hidden">
+                <section className="relative bg-gradient-to-br from-gray-900 via-black to-[#0792FB] text-white py-48 px-6 md:px-12 lg:px-24 overflow-hidden">
                     {/* Background Glow/Blob */}
                     <div className="absolute -top-40 -left-14 w-[500px] h-[500px] bg-[#0792FB]/30 rounded-full blur-3xl opacity-25 animate-pulse" />
 
@@ -161,7 +194,7 @@ const Landing = () => {
 
                 <section
                     id="about"
-                    className="relative text-white py-32 px-6 md:px-12 lg:px-24"
+                    className="relative bg-[#050B1E] text-white py-32 px-6 md:px-12 lg:px-24"
                 >
                     <motion.div
                         className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-16"
@@ -209,7 +242,7 @@ const Landing = () => {
                                 <div className="text-[#0792FB] mb-3"><FaBullseye size={20} /></div>
                                 <h3 className="font-semibold mb-2">Our Mission</h3>
                                 <p className="text-sm text-gray-300">
-                                    Strengthen Africa’s cyber ecosystem via policy, advisory, training, and digital rights advocacy.
+                                    Strengthen Africa’s cyber ecosystem through policy, advisory, capacity-building, and digital rights advocacy.
                                 </p>
                             </motion.div>
 
@@ -250,7 +283,7 @@ const Landing = () => {
                             viewport={{ once: true, amount: 0.3 }}
                             className="text-gray-300 max-w-2xl mx-auto"
                         >
-                            ACDRO delivers comprehensive, multi-sectoral services categorized under two major streams: strategic advisory and technical solutions.
+                            ACDRO delivers comprehensive, multi-sectoral services categorized under three major streams: strategic advisory and technical solutions.
                         </motion.p>
                     </div>
 
@@ -283,9 +316,8 @@ const Landing = () => {
                     </div>
                 </section>
 
-
                 <motion.section
-                    className="bg-gradient-to-br from-gray-900 via-black to-[#0792FB] text-white py-24 px-6 md:px-12"
+                    className="bg-[#050B1E] text-white py-24 px-6 md:px-12"
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: false, amount: 0.3 }}
@@ -330,11 +362,22 @@ const Landing = () => {
                         </motion.div>
                     </div>
                 </motion.section>
-
-
-
             </div>
 
+            {/* Scroll to Top Button */}
+            {showScrollButton && (
+                <motion.button
+                    onClick={scrollToTop}
+                    className="fixed bottom-5 right-5 bg-[#0792FB] text-white p-4 rounded-full shadow-lg hover:bg-blue-500 focus:outline-none"
+                    initial={{ opacity: 0, scale: 0 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.3 }}
+                    whileHover={{ scale: 1.1 }}
+                >
+                    ↑
+                </motion.button>
+            )}
+            <Footer/>
         </>
     )
 }
