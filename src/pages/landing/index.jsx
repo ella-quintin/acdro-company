@@ -1,9 +1,10 @@
 import Navbar from "../../components/navbar"
 import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { motion, useInView } from 'framer-motion';
 import { useEffect, useRef, useState } from "react";
 import { FaBullseye, FaEye, FaCheckCircle } from 'react-icons/fa';
-import { FaShieldAlt, FaTools, FaPeopleCarry, FaChartLine } from 'react-icons/fa';
+import { FaShieldAlt, FaTools, FaPeopleCarry, FaChartLine, FaChalkboardTeacher } from 'react-icons/fa';
 import academy from "../../assets/images/academy.jpg"
 import advisory from "../../assets/images/advisory.jpg"
 import approach from "../../assets/images/approach.jpg"
@@ -11,6 +12,7 @@ import capacity from "../../assets/images/capacity.jpg"
 import technical from "../../assets/images/technical.jpg"
 import impact from "../../assets/images/impact.jpg"
 import { image } from "motion/react-client";
+import { client } from "../../lib/sanity";
 import Footer from "../../components/footer";
 
 
@@ -54,6 +56,8 @@ const slideRight = {
 
 
 
+
+
 const services = [
     {
         icon: <FaShieldAlt className="text-white" size={20} />,
@@ -70,7 +74,7 @@ const services = [
         link: '/services#technical-services',
     },
     {
-        icon: <FaTools className="text-white" size={20} />,
+        icon: < FaChalkboardTeacher className="text-white" size={20} />,
         title: 'Capacity Building',
         desc: 'Through ACDRO Academy and specialized programs, we deliver targeted training, skills development, and knowledge transfer to empower stakeholders across civil society, law enforcement, and industry.',
         image: capacity,
@@ -108,9 +112,10 @@ const HeroHeading = () => {
                 setDisplayedText(fullText.slice(0, index + 1));
                 index++;
                 if (index === fullText.length) clearInterval(interval);
-            }, 30); 
+            }, 30);
         }
     }, [isInView]);
+
     
 
     return (
@@ -128,7 +133,7 @@ const HeroHeading = () => {
 
 const Landing = () => {
     const [showScrollButton, setShowScrollButton] = useState(false);
-// Handle scroll events to toggle button visibility
+    // Handle scroll events to toggle button visibility
     useEffect(() => {
         const handleScroll = () => {
             if (window.scrollY > 200) {
@@ -148,6 +153,36 @@ const Landing = () => {
             top: 0,
             behavior: "smooth",
         });
+    };
+
+    const location = useLocation();
+
+  useEffect(() => {
+    if (location.hash === "#about") {
+      const aboutSection = document.querySelector("#about");
+      aboutSection?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [location]);
+
+    const [recentPosts, setRecentPosts] = useState([]);
+
+    useEffect(() => {
+        client
+            .fetch(`*[_type == "post"] | order(publishedAt desc)[0..2]{
+    _id, title, slug, publishedAt,
+    body,
+    mainImage{asset->{url}}
+  }`)
+            .then(setRecentPosts)
+            .catch(console.error);
+
+    }, []);
+
+    const getExcerpt = (body) => {
+        const block = body.find((b) => b._type === "block");
+        return block
+            ? block.children.map((c) => c.text).join(" ").slice(0, 150) + "..."
+            : "";
     };
 
     return (
@@ -177,7 +212,7 @@ const Landing = () => {
 
                         <motion.p
                             variants={fadeUp}
-                            className="mt-6 text-lg text-gray-300 max-w-2xl leading-relaxed"
+                            className="mt-6 text-lg italic text-gray-300 max-w-2xl leading-relaxed"
                         >
                             Empowering Africa’s Digital Future through Policy, Protection, and Partnership.
                         </motion.p>
@@ -283,7 +318,7 @@ const Landing = () => {
                             viewport={{ once: true, amount: 0.3 }}
                             className="text-gray-300 max-w-2xl mx-auto"
                         >
-                            ACDRO delivers comprehensive, multi-sectoral services categorized under three major streams: strategic advisory and technical solutions.
+                            ACDRO delivers comprehensive, multi-sectoral services categorized under three major streams: strategic advisory, technical solutions and Capacity Building.
                         </motion.p>
                     </div>
 
@@ -364,6 +399,58 @@ const Landing = () => {
                 </motion.section>
             </div>
 
+            <section className="py-16 bg-[#050B1E]">
+                <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <h2 className="text-3xl font-bold text-white mb-8 text-center">
+                        Recent Blog Posts
+                    </h2>
+                    <div className="grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                        {recentPosts.map((post) => (
+                            <Link
+                                to={`/blog/${post.slug.current}`}
+                                key={post._id}
+                                className="bg-[#0F172A] rounded-xl shadow hover:shadow-lg transition overflow-hidden"
+                            >
+                                <img
+                                    src={post.mainImage?.asset?.url || "/placeholder.jpg"}
+                                    alt={post.title}
+                                    className="w-full h-44 object-cover hover:scale-105 transition-transform duration-300"
+                                />
+                                <div className="p-5">
+                                    <h3 className="text-lg font-semibold text-white mb-2">
+                                        {post.title}
+                                    </h3>
+
+                                    {/* ✅ use getExcerpt here */}
+                                    <p className="text-sm text-gray-300 mb-2">
+                                        {getExcerpt(post.body)}
+                                    </p>
+
+                                    {/* Published date after description */}
+                                    <p className="text-sm text-gray-500 mb-3">
+                                        {new Date(post.publishedAt).toDateString()}
+                                    </p>
+
+                                    <span className="text-[#0792FB] font-medium text-sm hover:underline inline-block cursor-pointer">
+                                        Read more →
+                                    </span>
+                                </div>
+                            </Link>
+                        ))}
+                    </div>
+
+                    {/* Button to full blog page */}
+                    <div className="text-center mt-10">
+                        <Link to="/blog">
+                            <button className="inline-block cursor-pointer bg-[#0792FB] hover:bg-blue-500 text-white px-6 py-3 rounded-full font-semibold text-sm shadow-lg transition">
+                                View All Posts
+                            </button>
+                        </Link>
+                    </div>
+                </div>
+
+            </section>
+
             {/* Scroll to Top Button */}
             {showScrollButton && (
                 <motion.button
@@ -377,7 +464,7 @@ const Landing = () => {
                     ↑
                 </motion.button>
             )}
-            <Footer/>
+            <Footer />
         </>
     )
 }

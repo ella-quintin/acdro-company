@@ -125,7 +125,7 @@ const ServicesPage = () => {
                             <li>Supported the development of the National Cybersecurity Strategy in Ghana and Sierra Leone.</li>
                             <li>Supported legal reforms for digital privacy and data protection.</li>
                             <li>Delivered cybersecurity training to public sector officers, security agencies and civil society stakeholders across Africa.</li>
-                            <li>Rolled out Computer Security Incidents Response Team(s)</li>
+                            <li>Rolled out Computer Security Incidents Response Teams (CSIRTS/ CERTS)</li>
                             <li>Organized Internet Right and Cyber Security Awareness workshops</li>
                             <li>Organized National Cyber Security Awareness Week</li>
                             <li>Organized National Internet Governance Forums (IGF)</li>

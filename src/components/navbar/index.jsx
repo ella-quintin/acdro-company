@@ -1,13 +1,17 @@
 
 import { useState, useEffect } from 'react';
 import logo from "../../assets/images/logo.png"
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
   const [mobileAcademyOpen, setMobileAcademyOpen] = useState(false);
+
+  const navigate = useNavigate();
+  const location = useLocation();
+
 
 
   useEffect(() => {
@@ -23,6 +27,22 @@ export default function Navbar() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [mobileOpen]);
+
+  const handleAboutClick = () => {
+    if (location.pathname !== "/") {
+      // Navigate to home with hash
+      navigate("/#about");
+    } else {
+      // Smooth scroll if already on home page
+      const aboutSection = document.querySelector("#about");
+      aboutSection?.scrollIntoView({ behavior: "smooth" });
+    }
+
+    // Close mobile menu (optional)
+    setMobileOpen(false);
+  };
+
+
 
 
 
@@ -42,9 +62,9 @@ export default function Navbar() {
               <Link to="/" className="hover:text-gray-300" >Home</Link>
 
             </div>
-            <a href="#about" className="hover:text-gray-300">
+            <button onClick={handleAboutClick} className="hover:text-gray-300">
               About
-            </a>
+            </button>
 
 
             <div className="relative group">
@@ -118,8 +138,10 @@ export default function Navbar() {
                 </div>
               </div>
             </div>
-            {/* <a href="#" className="hover:text-gray-300">Impact</a> */}
-            <a href="contact-us" className="hover:text-gray-300">Contact</a>
+
+            <Link to="/blog" className="hover:text-gray-300">Blog</Link>
+            <Link to="/gallery" className="hover:text-gray-300">Gallery</Link>
+            <a href="/contact-us" className="hover:text-gray-300">Contact</a>
           </div>
 
           {/* Auth Buttons
@@ -149,10 +171,11 @@ export default function Navbar() {
       </div>
 
       {mobileOpen && (
-        <div className="md:hidden px-8 py-6 space-y-2 bg-[#050B1E] text-white divide-y divide-white/10">
-          <a href="/" className="block pb-2 hover:text-gray-300">Home</a>
-          <a href="/#about" className="block py-2 hover:text-gray-300">About</a>
-
+        <div className="flex flex-col md:hidden px-8 py-6 space-y-2 bg-[#050B1E] text-white divide-y divide-white/10">
+          <Link to="/" className="hover:text-gray-300">Home</Link>
+          <button onClick={handleAboutClick} className="hover:text-gray-300 text-left">
+            About
+          </button>
           {/* Services Toggle */}
           <div>
             <button
@@ -213,7 +236,9 @@ export default function Navbar() {
             )}
           </div>
 
-          <a href="/contact-us" className="block pt-2 hover:text-gray-300">Contact</a>
+          <Link to="/blog" className="hover:text-gray-300">Blog</Link>
+          <Link to="/gallery" className="hover:text-gray-300">Gallery</Link>
+          <a href="/contact-us" className="hover:text-gray-300">Contact</a>
         </div>
       )}
 

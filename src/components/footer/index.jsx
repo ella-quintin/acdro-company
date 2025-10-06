@@ -6,10 +6,10 @@ const Footer = () => {
         <footer className="bg-[#061230] text-gray-300 py-16 px-6 md:px-12 lg:px-24">
             <div className="max-w-7xl mx-auto grid gap-10 md:grid-cols-4 sm:grid-cols-2">
 
-                {/* Logo & Tagline */}
+            
                 <div>
                     <img src={logo} alt="ACDRO Logo" className="h-16 mb-4" />
-                    <p className="text-sm leading-relaxed text-gray-400">
+                    <p className="text-sm leading-relaxed text-white">
                         Empowering Africa’s Digital Future through Policy, Protection, and Partnership.
                     </p>
                 </div>
@@ -26,7 +26,7 @@ const Footer = () => {
                     </ul>
                 </div>
 
-                {/* Contact Info */}
+            
                 <div>
                     <h4 className="text-white font-semibold mb-4">Contact</h4>
                     <ul className="space-y-3 text-sm">
@@ -42,10 +42,9 @@ const Footer = () => {
                             <FaEnvelope className="text-[#0792FB]" />
                             <span className="">Email:</span>{" "}
                             <a
-                                href="mailto:info@pleroma-scycamore.org"
+                                href="mailto:info@acdro.org"
                                 className="hover:underline hover:text-gray-200"
-                            >
-                                info@aibconsulting.biz
+                            >info@acdro.org
                             </a>
                         </li>
                     </ul>
