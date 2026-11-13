@@ -1,0 +1,48 @@
+# =====================================================================
+# ACDRO — Security Headers (shared Apache/cPanel hosting)
+# Upload to the web root (public_html). Requires mod_headers (standard).
+# Copied into dist/ automatically by Vite when building from public/.
+# Covers acdro.org and www.acdro.org (same docroot alias on cPanel).
+# =====================================================================
+
+<IfModule mod_headers.c>
+
+    # Forces browsers to use HTTPS for 1 year on the domain and all
+    # subdomains. Note: any subdomain that is not served over HTTPS
+    # with a valid certificate will become unreachable in browsers.
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+
+    # XSS protection: only allow same-origin scripts, styles, fonts;
+    # Sanity CMS data (queries) and images (CDN) as the only remote origins.
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' https://cdn.sanity.io; connect-src 'self' https://22hj55di.api.sanity.io https://cdn.sanity.io; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; upgrade-insecure-requests"
+
+    # Clickjacking protection (mirrors CSP frame-ancestors 'self')
+    Header always set X-Frame-Options "SAMEORIGIN"
+
+    # Stops browsers MIME-sniffing responses
+    Header always set X-Content-Type-Options "nosniff"
+
+    # Only send the origin on cross-origin navigations
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+
+    # Disable browser features the site does not use
+    Header always set Permissions-Policy "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=(), interest-cohort=()"
+
+    # Cross-origin isolation extras (listed under "Upcoming Headers")
+    Header always set Cross-Origin-Opener-Policy "same-origin"
+    Header always set Cross-Origin-Resource-Policy "same-origin"
+
+</IfModule>
+
+# Don't expose directory listings
+Options -Indexes
+
+# SPA routing fallback (replaces the Netlify-only public/_redirects)
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+    RewriteRule ^index\.html$ - [L]
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule . /index.html [L]
+</IfModule>
