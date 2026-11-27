@@ -1,0 +1,54 @@
+# =====================================================================
+# ACDRO — Security headers & hardening for Apache / cPanel
+# Upload as public_html/.htaccess (keep the leading dot, chmod 644).
+# Vite copies this file into dist/.htaccess on every build.
+# Requires mod_headers + mod_rewrite (standard on cPanel/Apache).
+# NOTE: if the hosting server is Nginx-only, .htaccess is ignored.
+#       See cpanel-upload/nginx-headers.conf for that case.
+# =====================================================================
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    # Send HTTP visitors (and securityheaders.com) to HTTPS.
+    # The X-Forwarded-Proto check prevents loops behind a TLS proxy.
+    RewriteCond %{HTTPS} !=on
+    RewriteCond %{HTTP:X-Forwarded-Proto} !https
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L,NE]
+
+    # SPA routing fallback: let React Router handle unknown paths.
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule . /index.html [L]
+</IfModule>
+
+<IfModule mod_headers.c>
+    # HSTS — 1 year, including subdomains (only honoured over HTTPS by browsers).
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+
+    # CSP — same-origin by default. Sanity hosts are the only external origins.
+    # apicdn.sanity.io is required because src/lib/sanity.js sets useCdn: true;
+    # without it the blog and gallery queries would be blocked by the browser.
+    Header always set Content-Security-Policy "default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' https://cdn.sanity.io; connect-src 'self' https://22hj55di.api.sanity.io https://22hj55di.apicdn.sanity.io https://cdn.sanity.io; font-src 'self'; frame-ancestors 'self'; form-action 'self'; upgrade-insecure-requests"
+
+    # Clickjacking protection (mirrors frame-ancestors 'self' above).
+    Header always set X-Frame-Options "SAMEORIGIN"
+
+    # Stop MIME sniffing.
+    Header always set X-Content-Type-Options "nosniff"
+
+    # Don't leak full URLs to third-party sites.
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+
+    # Disable browser features the site does not use.
+    Header always set Permissions-Policy "accelerometer=(), autoplay=(), camera=(), clipboard-read=(), clipboard-write=(), display-capture=(), encrypted-media=(), fullscreen=(), gamepad=(), geolocation=(), gyroscope=(), idle-detection=(), interest-cohort=(), local-fonts=(), magnetometer=(), microphone=(), midi=(), payment=(), picture-in-picture=(), publickey-credentials-get=(), screen-wake-lock=(), serial=(), usb=(), xr-spatial-tracking=()"
+
+    # Cross-origin hardening. COEP is deliberately NOT set: it would block
+    # the Sanity CDN images this site displays.
+    Header always set Cross-Origin-Opener-Policy "same-origin"
+    Header always set Cross-Origin-Resource-Policy "same-origin"
+</IfModule>
+
+# Don't expose directory listings.
+Options -Indexes
